@@ -1,0 +1,24 @@
+---
+import FooterBox from "./FooterBox.astro";
+---
+
+<footer class="bg-coffee-900 pt-5">
+    <div class="max-w-7xl mx-auto mt-20 grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <FooterBox heading="Ubicación">
+            <p>Coffe Street 39</p>
+            <p>Londres, UK</p>
+        </FooterBox>
+        <FooterBox heading="Reservaciones">
+            <p>Tel. 3800-0000</p>
+            <a href="tel:38000000">Llamar</a>
+        </FooterBox>
+        <FooterBox heading="Horario">
+            <p>Lun - Jue: 09:00 - 21:00</p>
+            <p>Vie - Sab: 09:00 - 22:00</p>
+            <p>Dom: 09:00 - 20:00</p>
+        </FooterBox>
+    </div>
+    <p class="text-white text-center text-sm py-10">
+        Todos los derechos reservados RHVID. &copy; {new Date().getFullYear()}
+    </p>
+</footer>
