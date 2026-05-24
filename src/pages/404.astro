@@ -1,0 +1,19 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import bg from "@/assets/bg_404.jpg";
+---
+
+<Layout title="Pagina no encontrada" subtitle="404" bgImage={bg.src}>
+    <div class="text-center mt-10 mb-10">
+        <h1 class="text-6xl font-black text-coffee-900">404</h1>
+        <p class="text-2xl font-black text-coffee-900">Pagina no encontrada</p>
+        <p class="text-xl font-black text-coffee-900">
+            La pagina que buscas no existe
+        </p>
+        <a
+            href="/"
+            class="inline-block mt-5 bg-coffee-900 text-white px-5 py-2 rounded-full"
+            >Volver al inicio</a
+        >
+    </div>
+</Layout>

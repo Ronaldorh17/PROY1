@@ -2,8 +2,8 @@
 import { Picture } from "astro:assets";
 import Layout from "@/layouts/Layout.astro";
 import { BaseWPSchema } from "@/types";
-
-const url = `${import.meta.env.API_URL}/pages?slug=nosotros`;
+import ProductsMenu from "@/components/menu/PorudctsMenu.astro";
+const url = `${import.meta.env.API_URL}/pages?slug=menu`;
 const response = await fetch(url);
 const json = await response.json();
 const data = BaseWPSchema.parse(json[0]);
@@ -29,4 +29,6 @@ const data = BaseWPSchema.parse(json[0]);
             set:html={data.content.rendered}
         />
     </div>
+
+    <ProductsMenu slot="after-main-content" />
 </Layout>

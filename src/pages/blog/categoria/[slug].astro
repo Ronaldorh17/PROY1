@@ -1,0 +1,43 @@
+---
+import PostCard from "@/components/blog/PostCard.astro";
+import Layout from "@/layouts/Layout.astro";
+import { BlogSchema, CategoriesSlugSchema, CategorySchema } from "@/types";
+
+export async function getStaticPaths() {
+    const res = await fetch(
+        `${import.meta.env.API_URL}/categories?_fields=slug`,
+    );
+    const data = await res.json();
+    const categories = CategoriesSlugSchema.parse(data);
+    return categories.map((cat) => ({
+        params: {
+            slug: cat.slug,
+        },
+    }));
+}
+const { slug } = Astro.params;
+const catUrl = await fetch(
+    `${import.meta.env.API_URL}/categories?slug=${slug}`,
+);
+const catRes = await catUrl.json();
+const category = CategorySchema.parse(catRes[0]);
+
+const postsUrl = await fetch(
+    `${import.meta.env.API_URL}/posts?categories=${category.id}`,
+);
+const postsRes = await postsUrl.json();
+const posts = BlogSchema.array().parse(postsRes);
+console.log(posts);
+---
+
+<Layout
+    title={`Categorias: ${category.name}`}
+    subtitle={`Mas de ${category.name}`}
+    bgImage={posts[0].featured_images.full.url}
+>
+    <section class="mb-20 mt-10 lg:mt-0">
+        <div class="flex flex-wrap justify-center gap-10">
+            {posts.map((post) => <PostCard post={post} />)}
+        </div>
+    </section>
+</Layout>

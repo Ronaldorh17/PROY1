@@ -1,0 +1,58 @@
+---
+import { Picture, inferRemoteSize } from "astro:assets";
+import Layout from "@/layouts/Layout.astro";
+import { ProcesoPageSchema } from "@/types";
+
+const url = `${import.meta.env.API_URL}/pages?slug=proceso`;
+const response = await fetch(url);
+const json = await response.json();
+const data = ProcesoPageSchema.parse(json[0]);
+
+const procesosKeys = Array.from({ length: 5 }, (_, i) => `proceso_${i + 1}`);
+console.log(data);
+---
+
+<Layout
+    title="Proceso"
+    subtitle={data.acf.subtitulo}
+    bgImage={data.featured_images.full.url}
+>
+    <div
+        class="text-xl space-y-3 mt-10 lg:mt-0 text-justify"
+        set:html={data.content.rendered}
+    />
+
+    <div class="mt-10 space-y-10">
+        {
+            procesosKeys.map(async (keys, i) => {
+                const { titulo, descripcion, imagen } = data.acf[keys];
+                const { width, height } = await inferRemoteSize(imagen);
+
+                return (
+                    <section class="flex flex-col lg:flex-row lg:items-center gap-10">
+                        <div
+                            class={`w-full lg:w-1/2 ${i % 2 === 0 ? "order-1" : "order-2"}`}
+                        >
+                            <Picture
+                                src={imagen}
+                                alt={titulo}
+                                width={width}
+                                height={height}
+                                formats={["webp", "avif"]}
+                            />
+                        </div>
+
+                        <div
+                            class={`w-full lg:w-1/2 ${i % 2 === 0 ? "order-2" : "order-1"}`}
+                        >
+                            <h3 class="text-coffee-900 font-black uppercase text-4xl pb-10">
+                                {titulo}
+                            </h3>
+                            <p class="text-lg text-justify">{descripcion}</p>
+                        </div>
+                    </section>
+                );
+            })
+        }
+    </div>
+</Layout>

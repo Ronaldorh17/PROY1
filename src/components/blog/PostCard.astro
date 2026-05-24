@@ -1,0 +1,43 @@
+---
+import { Picture } from "astro:assets";
+import type { Post } from "@/types";
+import PostMeta from "./PostMeta.astro";
+import PostCategories from "./PostCategories.astro";
+
+interface Props {
+    post: Post;
+}
+const { post } = Astro.props;
+---
+
+<article
+    class="grid grid-cols-1 lg:grid-cols-3 gap-5 py-10 border-b last-of-type:border-0 border-zinc-200"
+>
+    <div class="lg:col-span-2 space-y-5">
+        <h3 class="text-coffee-900 font-black uppercase text-4xl">
+            <a href={`/blog/${post.slug}`}>
+                {post.title.rendered}
+            </a>
+        </h3>
+        <PostMeta date={post.date} />
+        {
+            post.category_details.map((cat) => (
+                <PostCategories name={cat.name} slug={cat.slug} />
+            ))
+        }
+        <div
+            class="text-lg text-justify line-clamp-2"
+            set:html={post.content.rendered}
+        />
+    </div>
+    <div class="lg:col-span-1">
+        <Picture
+            src={post.featured_images.medium_large.url}
+            alt={`Imagen de ${post.title.rendered}`}
+            width={post.featured_images.medium_large.width}
+            height={post.featured_images.medium_large.height}
+            formats={["webp", "avif"]}
+            class="w-full lg:w-96 h-64 object-cover rounded-2xl"
+        />
+    </div>
+</article>

@@ -1,0 +1,50 @@
+---
+import { Picture } from "astro:assets";
+import { BlogSchema } from "@/types";
+import Layout from "@/layouts/Layout.astro";
+import PostMeta from "@/components/blog/PostMeta.astro";
+import PostCategories from "@/components/blog/PostCategories.astro";
+
+export const prerender = false; //No compiles esta pagina
+
+const { slug } = Astro.params;
+
+const url = `${import.meta.env.API_URL}/posts?slug=${slug}`;
+const res = await fetch(url);
+const json = await res.json();
+const post = BlogSchema.safeParse(json[0]);
+
+if (!post.success) {
+    return Astro.redirect("/404");
+}
+
+const { title, featured_images, date, category_details, content } = post.data;
+---
+
+<Layout
+    title={title.rendered}
+    subtitle={title.rendered}
+    bgImage={featured_images.full.url}
+>
+    <article class="space-y-5 max-w-4xl mx-auto">
+        <PostMeta date={date} />
+        {
+            category_details.map((cat) => (
+                <PostCategories name={cat.name} slug={cat.slug} />
+            ))
+        }
+        <Picture
+            src={post.data.featured_images.full.url}
+            alt={`Imagen de ${post.data.title.rendered}`}
+            width={post.data.featured_images.full.width}
+            height={post.data.featured_images.full.height}
+            formats={["webp", "avif"]}
+            widths={[480, 768, 1024]}
+            class="w-full h-auto rounded-lg shadow-lg mb-5"
+        />
+        <div
+            class="text-lg text-justify space-y-2 mt-10 lg:mt-0"
+            set:html={content.rendered}
+        />
+    </article>
+</Layout>

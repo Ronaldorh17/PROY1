@@ -30,9 +30,15 @@ const usuario = "Ronaldo";
     </head>
     <body class="bg-coffee-100">
         <Header bgImage={bgImage} subtitle={subtitle} />
-        <main class="bg-white p-20 max-w-7xl mx-auto lg:-mt-10 relative">
+        <main class="bg-white p-10 lg:p-20 max-w-7xl mx-auto lg:-mt-5 relative">
+            <h2
+                class="text-coffee-900 font-black text-center text-4xl pb-10 uppercase after:bg-coffee-icon"
+            >
+                {title}
+            </h2>
             <slot />
         </main>
+        <slot name="after-main-content" />
         <Footer />
     </body>
 </html>

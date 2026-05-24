@@ -30,3 +30,8 @@
     display: block;
     margin: 0 auto;
 }
+
+@utility bg-menu-image {
+    background-image: url(../assets/menu_artwork.svg);
+
+}

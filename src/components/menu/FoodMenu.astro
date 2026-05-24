@@ -1,0 +1,38 @@
+---
+import { MenuItemsSchema } from "@/types";
+import MenuItem from "./MenuItem.astro";
+
+const url = `${import.meta.env.API_URL}/products?product_categories=6`;
+const response = await fetch(url);
+const data = await MenuItemsSchema.parse(await response.json());
+---
+
+<div>
+    <h4 class="text-white font-black text-4xl uppercase text-center my-10">
+        Comidas
+    </h4>
+    <ul id="food-gallery" class="space-y-3">
+        {
+            data.map((item) => (
+                <MenuItem
+                    title={item.title.rendered}
+                    description={item.acf.description}
+                    price={item.acf.price}
+                    image={item.featured_images}
+                />
+            ))
+        }
+    </ul>
+</div>
+
+<script>
+    import PhotoSwipeLightbox from "photoswipe/lightbox";
+    import "photoswipe/style.css";
+
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: "#food-gallery",
+        children: "a",
+        pswpModule: () => import("photoswipe"),
+    });
+    lightbox.init();
+</script>
