@@ -89,8 +89,29 @@ const MenuItemSchema = BaseWPSchema.pick({
 export const MenuItemsSchema = z.array(MenuItemSchema);
 
 
+const MarkerSchema = z.object({
+    label: z.string(),
+    lat: z.number(),
+    lng: z.number(),
+})
+
+const LocationSchema = z.object({
+    lat: z.number(),
+    lng: z.number(),
+    zoom: z.number(),
+    markers: z.array(MarkerSchema),
+})
+
+export const ContactoPageSchema = BaseWPSchema.extend({
+    acf: z.object({
+        subtitulo: z.string(),
+    }).catchall(LocationSchema)
+})
+
 export type Post = z.infer<typeof BlogSchema>
 
 export type Gallery = z.infer<typeof gallerySchema>
 
 export type FeatureImages = z.infer<typeof featured_imagesSchema>
+
+export type Location = z.infer<typeof LocationSchema>
